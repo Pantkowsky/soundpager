@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Discogify</string>
+    <string name="search">SEARCH:</string>
+    <string name="search_hint">Enter...</string>
+    <string name="favorite">Follow</string>
+    <string-array name="menu">
+        <item>Database</item>
+        <item>Search</item>
+    </string-array>
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
+    <string name="item_search">Search</string>
+</resources>

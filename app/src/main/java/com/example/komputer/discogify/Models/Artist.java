@@ -86,6 +86,9 @@ public class Artist {
         this.mUuid = mUuid;
     }
 
+    public String getFormattedName(){
+        return this.getName().replaceAll(" ", "-");
+    }
 
 
 }

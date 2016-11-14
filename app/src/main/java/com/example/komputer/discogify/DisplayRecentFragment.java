@@ -169,20 +169,43 @@ public class DisplayRecentFragment extends Fragment {
         protected List<ArtistReleases> doInBackground(UUID...uuid){
 
             Artist artist = sArtistCircle.getArtist(uuid[0]);
-            List<ArtistReleases> unfilteredList = new DiscogsFetchr().fetchRecentReleases(artist.getUrl());
-            Log.i(TAG, "Loading...");
+            List<ArtistReleases> unfilteredList = new DiscogsFetchr().fetchRecentReleases(artist.getFormattedName());
+            Log.i(TAG, "loading");
             return unfilteredList;
         }
 
         @Override
         protected void onPostExecute(List<ArtistReleases> artistReleases){
 
+            Log.i(TAG, "completed");
             for (ArtistReleases release: artistReleases) {
                 mArtistReleases.add(release);
             }
             setupAdapter();
-            Log.i(TAG, "Completed.");
         }
-
     }
+
+
+//    private class FetchRecentReleasesTask extends AsyncTask<UUID,Void,List<ArtistReleases>> {
+//
+//        @Override
+//        protected List<ArtistReleases> doInBackground(UUID...uuid){
+//
+//            Artist artist = sArtistCircle.getArtist(uuid[0]);
+//            List<ArtistReleases> unfilteredList = new DiscogsFetchr().fetchRecentReleases(artist.getUrl());
+//            Log.i(TAG, "Loading...");
+//            return unfilteredList;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(List<ArtistReleases> artistReleases){
+//
+//            for (ArtistReleases release: artistReleases) {
+//                mArtistReleases.add(release);
+//            }
+//            setupAdapter();
+//            Log.i(TAG, "Completed.");
+//        }
+//
+//    }
 }

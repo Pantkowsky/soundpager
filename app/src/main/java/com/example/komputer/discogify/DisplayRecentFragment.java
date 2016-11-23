@@ -2,6 +2,7 @@ package com.example.komputer.discogify;
 
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -55,7 +56,6 @@ public class DisplayRecentFragment extends Fragment {
         mDisplayRecyclerView = (RecyclerView)v.findViewById(R.id.display_recent_recycler_view);
         mDisplayRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
         return v;
     }
 
@@ -98,17 +98,6 @@ public class DisplayRecentFragment extends Fragment {
             mDateTextView.setTag(artistReleases.getMainRelease());
             mTitleTextView.setTag(artistReleases.getResource());
             mTitleTextView.setId(Integer.parseInt(artistReleases.getId()));
-//            if(artistReleases.getId() != null){
-//                mTitleTextView.setId(Integer.parseInt(artistReleases.getId()));
-//            }
-//            mTitleTextView.setTag(artistReleases.getResource());
-//            if(artistReleases.getMainRelease() != null){
-//                mDateTextView.setTag(artistReleases.getMainRelease());
-//            }
-//            if(artistReleases.getType() != null){
-//                mAuthorTextView.setTag(artistReleases.getType());
-//                mHiddenTextView.setTag(artistReleases.getType());
-//            }
         }
 
         public void onClick(View view) throws NullPointerException {
@@ -163,37 +152,13 @@ public class DisplayRecentFragment extends Fragment {
         }
     }
 
-    private class FetchRecentReleasesTask extends AsyncTask<UUID,Void,List<ArtistReleases>> {
-
-        @Override
-        protected List<ArtistReleases> doInBackground(UUID...uuid){
-
-            Artist artist = sArtistCircle.getArtist(uuid[0]);
-            List<ArtistReleases> unfilteredList = new DiscogsFetchr().fetchRecentReleases(artist.getFormattedName());
-            Log.i(TAG, "loading");
-            return unfilteredList;
-        }
-
-        @Override
-        protected void onPostExecute(List<ArtistReleases> artistReleases){
-
-            Log.i(TAG, "completed");
-            for (ArtistReleases release: artistReleases) {
-                mArtistReleases.add(release);
-            }
-            setupAdapter();
-        }
-    }
-
-
 //    private class FetchRecentReleasesTask extends AsyncTask<UUID,Void,List<ArtistReleases>> {
 //
 //        @Override
 //        protected List<ArtistReleases> doInBackground(UUID...uuid){
 //
 //            Artist artist = sArtistCircle.getArtist(uuid[0]);
-//            List<ArtistReleases> unfilteredList = new DiscogsFetchr().fetchRecentReleases(artist.getUrl());
-//            Log.i(TAG, "Loading...");
+//            List<ArtistReleases> unfilteredList = new DiscogsFetchr().fetchRecentReleases(artist.getFormattedName());
 //            return unfilteredList;
 //        }
 //
@@ -204,8 +169,31 @@ public class DisplayRecentFragment extends Fragment {
 //                mArtistReleases.add(release);
 //            }
 //            setupAdapter();
-//            Log.i(TAG, "Completed.");
 //        }
-//
 //    }
+
+
+    private class FetchRecentReleasesTask extends AsyncTask<UUID,Void,List<ArtistReleases>> {
+
+        @Override
+        protected List<ArtistReleases> doInBackground(UUID...uuid){
+
+            Artist artist = sArtistCircle.getArtist(uuid[0]);
+            Log.i(TAG, "artist url is: " + artist.getUrl());
+            List<ArtistReleases> unfilteredList = new DiscogsFetchr().fetchRecentReleases(artist.getUrl());
+            Log.i(TAG, "Loading...");
+            return unfilteredList;
+        }
+
+        @Override
+        protected void onPostExecute(List<ArtistReleases> artistReleases){
+
+            for (ArtistReleases release: artistReleases) {
+                mArtistReleases.add(release);
+            }
+            setupAdapter();
+            Log.i(TAG, "Completed.");
+        }
+
+    }
 }

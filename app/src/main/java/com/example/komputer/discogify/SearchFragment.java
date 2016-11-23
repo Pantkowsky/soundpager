@@ -2,6 +2,7 @@ package com.example.komputer.discogify;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.input.InputManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +69,8 @@ public class SearchFragment extends Fragment {
                 if(mEnterArtistTextView.length() > 0){
                     new FetchMainTask().execute();
                 }
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
         mSearchRecyclerView = (RecyclerView)v.findViewById(R.id.search_fragment_recycler_view);

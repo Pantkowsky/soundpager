@@ -22,9 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by apant on 21/10/2016.
- */
+
 public class DisplayRecentFragment extends Fragment {
 
     private static final String TAG = "DisplayRecentFragment";
@@ -32,6 +30,7 @@ public class DisplayRecentFragment extends Fragment {
     private static ArtistCircle sArtistCircle;
     private List<ArtistReleases> mArtistReleases = new ArrayList<>();
     private RecyclerView mDisplayRecyclerView;
+//    private boolean mRunning = true;
 
     public static DisplayRecentFragment newInstance(){
         return new DisplayRecentFragment();
@@ -42,11 +41,14 @@ public class DisplayRecentFragment extends Fragment {
         super.onCreate(savedOnInstanceState);
         setRetainInstance(true);
 
-        sArtistCircle = ArtistCircle.get(getContext());
-        for (Artist artist: sArtistCircle.getArtists()) {
-            UUID uuid = artist.getUuid();
-            new FetchRecentReleasesTask().execute(uuid);
-        }
+        //mRunning = true;
+        downloadRecent();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+//        mRunning = false;
     }
 
     @Override
@@ -62,6 +64,14 @@ public class DisplayRecentFragment extends Fragment {
     private void setupAdapter(){
         if(isAdded()){
             mDisplayRecyclerView.setAdapter(new ArtistAdapter(mArtistReleases));
+        }
+    }
+
+    private void downloadRecent(){
+        sArtistCircle = ArtistCircle.get(getContext());
+        for (Artist artist: sArtistCircle.getArtists()) {
+            UUID uuid = artist.getUuid();
+            new FetchRecentReleasesTask().execute(uuid);
         }
     }
 
@@ -189,6 +199,7 @@ public class DisplayRecentFragment extends Fragment {
         protected void onPostExecute(List<ArtistReleases> artistReleases){
 
             for (ArtistReleases release: artistReleases) {
+                if(sArtistCircle.exists(release.getProducer()))
                 mArtistReleases.add(release);
             }
             setupAdapter();

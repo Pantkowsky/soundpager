@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by Komputer on 02/10/2016.
- */
 public class ArtistCircle {
     private static final String TAG = "artist";
 
@@ -45,14 +42,6 @@ public class ArtistCircle {
         mDatabase.insert(ArtistTable.NAME, null, values);
     }
 
-//    public void deleteItem(String itemId){
-//
-//
-//        mDatabase.delete(ArtistTable.NAME, ArtistTable.Columns.UUID + " = ?", new String[]{itemId});
-//        Log.d(TAG, "is deleted");
-//
-//    }
-
     public void deleteArtist(String name){
 
         mDatabase.delete(ArtistTable.NAME, ArtistTable.Columns.NAME + " = ?", new String[]{name});
@@ -61,7 +50,6 @@ public class ArtistCircle {
 
     public List<Artist> getArtists(){
         List<Artist> artists = new ArrayList<>();
-
         ArtistCursorWrapper cursor = queryArtist(null, null);
 
         try{
@@ -73,7 +61,6 @@ public class ArtistCircle {
         }finally {
             cursor.close();
         }
-
         return artists;
     }
 
@@ -110,7 +97,6 @@ public class ArtistCircle {
         mDatabase.update(ArtistTable.NAME, values,
                 ArtistTable.Columns.UUID + " = ?",
                 new String[] { uuidString });
-
     }
 
     public static ContentValues getContentValues(Artist artist){
@@ -137,45 +123,21 @@ public class ArtistCircle {
         return new ArtistCursorWrapper(cursor);
     }
 
-//    public boolean exists(String name){
-//
-//        String[] columns = { ArtistTable.Columns.NAME};
-//        String selection = ArtistTable.Columns.NAME + " =?";
-//        String[] selectionArgs = { name };
-//        String limit = "1";
-//
-//        Cursor cursor = mDatabase.query(ArtistTable.NAME, columns, selection, selectionArgs, null, null, null, limit);
-//        boolean exists = (cursor.getCount() > 0);
-//        cursor.close();
-//        return exists;
-//    }
-
     public boolean exists(String name) {
         String selectString = "SELECT * FROM " + ArtistTable.NAME + " WHERE " + ArtistTable.Columns.NAME + " =?";
-
-        // Add the String you are searching by here.
-        // Put it in an array to avoid an unrecognized token error
         Cursor cursor = mDatabase.rawQuery(selectString, new String[] {name});
-
         boolean hasObject = false;
+
         if(cursor.moveToFirst()){
             hasObject = true;
-
-            //region if you had multiple records to check for, use this region.
 
             int count = 0;
             while(cursor.moveToNext()){
                 count++;
             }
-            //here, count is records found
-            Log.d(TAG, String.format("%d records found", count));
-
-            //endregion
-
         }
 
-        cursor.close();          // Dont forget to close your cursor
-        //mDatabase.close();              //AND your Database!
+        cursor.close();
         return hasObject;
     }
 }

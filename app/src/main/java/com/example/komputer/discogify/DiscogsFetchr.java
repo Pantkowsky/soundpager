@@ -230,19 +230,7 @@ public class DiscogsFetchr {
         List<ArtistReleases> versions = new ArrayList<>();
         Release release;
 
-        List<String> months = new ArrayList<>();
-        months.add("Jan");
-        months.add("Feb");
-        months.add("Mar");
-        months.add("Apr");
-        months.add("May");
-        months.add("Jun");
-        months.add("Jul");
-        months.add("Aug");
-        months.add("Sep");
-        months.add("Oct");
-        months.add("Nov");
-        months.add("Dec");
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
@@ -263,7 +251,7 @@ public class DiscogsFetchr {
         for(int i = 0; i < filteredList.size(); i++){
             if(filteredList.get(i).getMainRelease() == null){
                 release = fetchReleaseInfo(filteredList.get(i).getId());
-                if(format(release.getAddedDate()).substring(3, 6).equals(months.get(currentMonth))){
+                if(format(release.getAddedDate()).substring(3, 6).equals(months[currentMonth])){
                     filteredList.get(i).setDateAdded(format(release.getAddedDate()));
                     filteredList.get(i).setDateReleased(release.getReleaseDate());
                     sortedList.add(filteredList.get(i));
@@ -275,7 +263,7 @@ public class DiscogsFetchr {
         }
         for(int y = 0; y < versions.size(); y++){
             release = fetchMasterReleaseInfo(versions.get(y).getResource());
-            if(format(release.getAddedDate()).substring(3, 6).equals(months.get(currentMonth))){
+            if(format(release.getAddedDate()).substring(3, 6).equals(months[currentMonth])){
                 versions.get(y).setTitle(release.getTitle());
                 versions.get(y).setProducer(release.getProducer());
                 versions.get(y).setDateAdded(format(release.getAddedDate()));
